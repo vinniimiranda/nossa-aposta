@@ -1,20 +1,31 @@
 import { sql } from "drizzle-orm";
-import { index, int, sqliteTableCreator, text } from "drizzle-orm/sqlite-core";
+import {
+  index,
+  pgTable,
+  serial,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core";
 
-export const createTable = sqliteTableCreator((name) => `${name}`);
+export const users = pgTable("users", {
+  id: serial("id").primaryKey(),
+  fullName: text("full_name"),
+  phone: varchar("phone", { length: 256 }),
+});
 
-export const bets = createTable(
+export const bets = pgTable(
   "bets",
   {
-    id: int("id", { mode: "number" }).primaryKey({ autoIncrement: true }),
-    name: text("name", { length: 256 }),
-    numbers: text("numbers", { length: 256 }).notNull(),
-    identifier: text("identifier", { length: 256 }).notNull(),
-    createdAt: int("created_at", { mode: "timestamp" })
-      .default(sql`(unixepoch())`)
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 256 }),
+    numbers: varchar("numbers", { length: 256 }).notNull(),
+    identifier: varchar("identifier", { length: 256 }).notNull(),
+    createdAt: timestamp("created_at", { mode: "date" })
+      .default(sql`(now())`)
       .notNull(),
-    updatedAt: int("updated_at", { mode: "timestamp" }).$onUpdate(
-      () => new Date(),
+    updatedAt: timestamp("updated_at", { mode: "date" }).$onUpdate(
+      () => sql`(now())`,
     ),
   },
   (config) => ({

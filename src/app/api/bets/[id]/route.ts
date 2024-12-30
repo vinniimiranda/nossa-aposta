@@ -1,3 +1,4 @@
+import { eq } from "drizzle-orm";
 import { db } from "../../../../server/db";
 import { bets } from "../../../../server/db/schema";
 
@@ -6,11 +7,20 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   const { id } = params;
-  const bets = await db.query.bets.findMany({
-    where: (bets, { eq }) => eq(bets.identifier, id),
-  });
+  const result = await db.select().from(bets).where(eq(bets.identifier, id));
 
-  return new Response(JSON.stringify(bets));
+  return new Response(
+    JSON.stringify(
+      result.map((bet) => {
+        return {
+          id: bet.id,
+          name: bet.name,
+          numbers: bet.numbers.split(","),
+          identifier: bet.identifier,
+        };
+      }),
+    ),
+  );
 }
 
 export async function POST(request: Request) {

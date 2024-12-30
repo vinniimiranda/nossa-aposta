@@ -1,4 +1,3 @@
-// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 "use client";
 
 import { NumberSelector } from "@/components/NumberSelector";
@@ -64,11 +63,12 @@ export default function BetsPage({
   useEffect(() => {
     async function fetchBets() {
       const res = await fetch("/api/bets/" + id);
-      const data: { bets: Bet[] } = await res.json();
-      if (!data.bets) {
+      const data = await res.json();
+
+      if (!data) {
         return;
       }
-      setBets(data.bets);
+      setBets(data as Bet[]);
     }
 
     void fetchBets();
