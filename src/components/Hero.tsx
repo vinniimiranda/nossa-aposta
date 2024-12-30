@@ -1,4 +1,4 @@
-import LotteryDialog from "./Bets";
+import LotteryDialog from "./LotteryModal";
 
 export default function Hero() {
   return (
