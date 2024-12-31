@@ -15,7 +15,7 @@ export async function GET(
         return {
           id: bet.id,
           name: bet.name,
-          numbers: bet.numbers.split(","),
+          numbers: bet.numbers.split(",").sort((a, b) => Number(a) - Number(b)),
           identifier: bet.identifier,
         };
       }),

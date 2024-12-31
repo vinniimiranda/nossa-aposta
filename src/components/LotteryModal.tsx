@@ -38,7 +38,11 @@ const lotteryTypes = [
   },
 ];
 
-export default function LotteryDialog() {
+interface LotteryDialogProps {
+  text: string;
+}
+
+export default function LotteryDialog({ text }: LotteryDialogProps) {
   const [open, setOpen] = useState(false);
 
   const router = useRouter();
@@ -51,7 +55,7 @@ export default function LotteryDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default">Comece agora!</Button>
+        <Button variant="default">{text}</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

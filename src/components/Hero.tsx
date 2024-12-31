@@ -10,7 +10,7 @@ export default function Hero() {
         <p className="mb-8 text-xl">
           Crie, gerencie e participe de bolões de forma simples e divertida!
         </p>
-        <LotteryDialog />
+        <LotteryDialog text="Começar agora!" />
       </div>
     </section>
   );

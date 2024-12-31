@@ -13,8 +13,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { LucideDices, LucideShare2 } from "lucide-react";
+import { LucideDices } from "lucide-react";
 import { type Usable, use, useCallback, useEffect, useState } from "react";
+import CheckResult from "../../../components/CheckResult";
+import Share from "../../../components/Share";
+import { generateRandomNumbers } from "../../../lib/utils";
 
 interface Bet {
   id: number;
@@ -32,10 +35,7 @@ export default function BetsPage({
   const [amount, setAmount] = useState(6);
 
   const randomNumbers = useCallback(() => {
-    const randomNumbers = Array.from(
-      { length: amount },
-      () => Math.floor(Math.random() * 60) + 1,
-    );
+    const randomNumbers = generateRandomNumbers(1, 60, amount);
     setNumbers(randomNumbers);
   }, [amount]);
 
@@ -74,14 +74,13 @@ export default function BetsPage({
     void fetchBets();
   }, [id]);
   return (
-    <div className="container mx-auto p-4">
-      <div className="flex items-center justify-between">
-        <h1 className="mb-4 text-2xl font-bold">
+    <div className="xs:p-0 flex-1 flex-col p-8">
+      <div className="mb-4 flex items-center justify-between gap-2">
+        <h1 className="flex-1 text-2xl font-bold">
           Cadastro de Apostas (Bolão) #{id}
         </h1>
-        <Button variant={"secondary"}>
-          <LucideShare2 />
-        </Button>
+        <Share />
+        <CheckResult bets={bets} />
       </div>
 
       <Card className="mb-6">
@@ -146,12 +145,12 @@ export default function BetsPage({
         </CardContent>
       </Card>
 
-      <Card>
+      <Card className="">
         <CardHeader>
           <CardTitle>Apostas Cadastradas</CardTitle>
         </CardHeader>
         <CardContent>
-          <ScrollArea className="h-[350px]">
+          <ScrollArea className="h-[350px] px-0">
             <div className="grid grid-cols-2 gap-2">
               {bets.map((bet) => (
                 <div
@@ -159,7 +158,7 @@ export default function BetsPage({
                   className="w-full space-y-2 rounded bg-secondary p-2"
                 >
                   <p className="font-semibold">{bet.name}</p>
-                  <p className="space-x-2 text-sm text-muted-foreground">
+                  <p className="space-x-1 text-sm text-muted-foreground">
                     {bet.numbers.map((n) => (
                       <span
                         key={bet.id + n}

@@ -22,3 +22,15 @@ export function generateUniqueId(length = 16) {
 
   return result;
 }
+
+export function generateRandomNumbers(min = 1, max: number, amount: number) {
+  const randomNumbers: number[] = [];
+  for (let i = 0; i < amount; i++) {
+    let newNumber = Math.floor(Math.random() * max) + 1;
+    while (randomNumbers.includes(newNumber)) {
+      newNumber = Math.floor(Math.random() * max) + 1;
+    }
+    randomNumbers.push(newNumber);
+  }
+  return randomNumbers;
+}
