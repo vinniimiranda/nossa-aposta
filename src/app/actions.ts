@@ -1,5 +1,8 @@
 "use server";
 
+import { generateUniqueId } from "@/lib/utils";
+import { db } from "@/server/db";
+import { pools } from "@/server/db/schema";
 import { createClient } from "@/utils/supabase/server";
 import { encodedRedirect } from "@/utils/utils";
 import { headers } from "next/headers";
@@ -131,4 +134,29 @@ export const signOutAction = async () => {
   const supabase = await createClient();
   await supabase.auth.signOut();
   return redirect("/");
+};
+
+export const createPool = async (formData: FormData) => {
+  const name = formData.get("name")?.toString();
+  const lottery = formData.get("lottery")?.toString();
+  const drawDate = formData.get("drawDate")?.toString();
+  const supabase = await createClient();
+  const identifier = generateUniqueId(8);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const pool = await db
+    .insert(pools)
+    .values({
+      identifier: identifier,
+      name: name!,
+      lottery: lottery!,
+      drawDate: new Date(drawDate!),
+      owner: session?.user.email!,
+    })
+    .returning();
+
+  return redirect("/bets/" + identifier);
 };

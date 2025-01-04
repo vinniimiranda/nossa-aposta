@@ -30,16 +30,16 @@ export default async function Header() {
   } = await supabase.auth.getUser();
 
   return (
-    <header className="bg-primary p-4 text-primary-foreground">
+    <header className="bg-header bg-primary bg-cover bg-repeat-space p-4 text-primary-foreground bg-blend-soft-light">
       <div className="flex items-center justify-between">
         <Link href="/" className="text-2xl font-bold">
-          Nossa Aposta!
+          Vamo Ganhar!
         </Link>
 
         {!user ? (
           <>
             <nav>
-              <ul className="flex space-x-4">
+              <ul className="flex flex-col md:flex-row md:gap-2">
                 <li>
                   <Link href="#features" className="hover:underline">
                     Recursos
@@ -86,7 +86,7 @@ export default async function Header() {
         ) : (
           <DropdownMenu dir="ltr" defaultOpen={false}>
             <DropdownMenuTrigger asChild>
-              <Avatar>
+              <Avatar className="hover:cursor-pointer">
                 <AvatarImage src="https://github.com/shadcn.png" />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
@@ -95,12 +95,12 @@ export default async function Header() {
               <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                <DropdownMenuItem>
-                  <Link href="/bets">Meus Bolões</Link>
+                <DropdownMenuItem className="hover:cursor-pointer">
+                  <Link href="/pools">Meus Bolões</Link>
                 </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
+              <DropdownMenuItem className="hover:cursor-pointer">
                 <form action={signOutAction}>
                   <button>Sair</button>
                 </form>

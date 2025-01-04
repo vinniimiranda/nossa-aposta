@@ -21,12 +21,15 @@ const features = [
 
 export default function Features() {
   return (
-    <section id="features" className="bg-muted py-20">
+    <section
+      id="features"
+      className="bg-feature bg-muted bg-opacity-5 bg-cover bg-fixed bg-no-repeat py-20"
+    >
       <div className="container mx-auto">
         <h2 className="mb-12 text-center text-3xl font-bold">
-          Por que escolher o Minha Aposta!
+          Por que escolher o Vamo Ganhar!
         </h2>
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div className="mx-auto grid grid-cols-subgrid items-center gap-8 md:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <Card key={index}>
               <CardHeader>

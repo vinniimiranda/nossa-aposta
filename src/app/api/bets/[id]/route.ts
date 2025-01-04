@@ -15,7 +15,7 @@ export async function GET(
         return {
           id: bet.id,
           name: bet.name,
-          numbers: bet.numbers.split(",").sort((a, b) => Number(a) - Number(b)),
+          numbers: bet.numbers.sort((a, b) => Number(a) - Number(b)),
           identifier: bet.identifier,
         };
       }),
@@ -31,7 +31,8 @@ export async function POST(request: Request) {
     .values({
       identifier: body.identifier,
       name: body.name,
-      numbers: body.numbers.toString(),
+      numbers: body.numbers,
+      poolId: body.poolId,
     })
     .returning();
   return new Response(JSON.stringify(bet));

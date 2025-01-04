@@ -1,6 +1,6 @@
 import { DialogTrigger } from "@radix-ui/react-dialog";
 import { Check } from "lucide-react";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { NumberSelector } from "./NumberSelector";
 import { Button } from "./ui/button";
 import { Dialog, DialogContent, DialogTitle } from "./ui/dialog";
@@ -13,20 +13,22 @@ interface Bet {
 }
 interface LotteryDialogProps {
   bets: Bet[];
+  setResult: Dispatch<SetStateAction<number[]>>;
 }
 
 export default function CheckResult(props: LotteryDialogProps) {
   const [numbers, setNumbers] = useState<number[]>([]);
 
   const checkResult = () => {
-    const result = props.bets.find((bet) => {
-      return numbers.every((num) =>
-        bet.numbers.map(Number).includes(Number(num)),
-      );
-    });
-    if (result) {
-      alert(`Parabéns, você ganhou com:  ${result.name}`);
-    }
+    // const result = props.bets.find((bet) => {
+    //   return numbers.every((num) =>
+    //     bet.numbers.map(Number).includes(Number(num)),
+    //   );
+    // });
+    // if (result) {
+
+    // }
+    props.setResult(numbers);
   };
   return (
     <Dialog>

@@ -6,7 +6,7 @@ export default function Footer() {
       <div className="container mx-auto">
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
           <div>
-            <h3 className="mb-4 text-xl font-bold">BolãoMaster</h3>
+            <h3 className="mb-4 text-xl font-bold">Vamo Ganhar!</h3>
             <p>Transformando apostas em diversão desde 2023.</p>
           </div>
           <div>
@@ -50,7 +50,10 @@ export default function Footer() {
           </div>
         </div>
         <div className="mt-8 text-center">
-          <p>&copy; 2023 BolãoMaster. Todos os direitos reservados.</p>
+          <p>
+            &copy; {new Date().getFullYear()} Vamo Ganhar! Todos os direitos
+            reservados.
+          </p>
         </div>
       </div>
     </footer>

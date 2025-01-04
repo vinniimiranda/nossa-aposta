@@ -2,12 +2,6 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -15,28 +9,11 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { CloverIcon, DollarSignIcon, StarIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Label } from "@radix-ui/react-label";
 import { useState } from "react";
-import { generateUniqueId } from "../lib/utils";
-
-const lotteryTypes = [
-  {
-    name: "Mega Sena da Virada",
-    description: "Sorteio especial de fim de ano com prêmios milionários",
-    icon: StarIcon,
-  },
-  {
-    name: "Lotofácil",
-    description: "Aposte em 15 números para ganhar",
-    icon: CloverIcon,
-  },
-  {
-    name: "Quina",
-    description: "Escolha 5 números e concorra a prêmios",
-    icon: DollarSignIcon,
-  },
-];
+import { createPool } from "../app/actions";
+import { SubmitButton } from "./SubmitButton";
+import { Input } from "./ui/input";
 
 interface LotteryDialogProps {
   text: string;
@@ -45,13 +22,6 @@ interface LotteryDialogProps {
 export default function LotteryDialog({ text }: LotteryDialogProps) {
   const [open, setOpen] = useState(false);
 
-  const router = useRouter();
-
-  const handleCreateLottery = () => {
-    const uniqueId = generateUniqueId(8);
-    router.push(`/bets/${uniqueId}`);
-  };
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -59,28 +29,41 @@ export default function LotteryDialog({ text }: LotteryDialogProps) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Tipos de Apostas</DialogTitle>
+          <DialogTitle>Começe seu bolão preenchendo os dados</DialogTitle>
           <DialogDescription>
             Escolha um tipo de loteria para fazer sua aposta.
           </DialogDescription>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          {lotteryTypes.map((lottery, index) => (
-            <Card
-              key={index}
-              className="cursor-pointer transition-colors hover:bg-accent"
-              onClick={handleCreateLottery}
-            >
-              <CardHeader className="flex flex-row items-center gap-4 p-4">
-                <lottery.icon className="h-8 w-8 text-primary" />
-                <div>
-                  <CardTitle>{lottery.name}</CardTitle>
-                  <CardDescription>{lottery.description}</CardDescription>
-                </div>
-              </CardHeader>
-            </Card>
-          ))}
-        </div>
+
+        <form className="flex min-w-64 flex-1 flex-col">
+          <div className="flex flex-col gap-2 [&>input]:mb-3">
+            <Label htmlFor="name">Nome</Label>
+            <Input
+              name="name"
+              placeholder="Bolão de fim de ano da familia"
+              required
+            />
+            <Label htmlFor="lottery">Loteria</Label>
+            <Input
+              type="lottery"
+              name="lottery"
+              placeholder="Mega Sena"
+              minLength={6}
+              required
+            />
+            <Label htmlFor="drawDate">Data de Sorteio</Label>
+            <Input
+              type="drawDate"
+              name="drawDate"
+              placeholder="31/12/2025"
+              minLength={6}
+              required
+            />
+            <SubmitButton formAction={createPool} pendingText="Cadastrando...">
+              Cadastrar
+            </SubmitButton>
+          </div>
+        </form>
       </DialogContent>
     </Dialog>
   );

@@ -1,9 +1,7 @@
 "use client";
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import LotteryDialog from "../../components/LotteryModal";
-import Share from "../../components/Share";
-import { Button } from "../../components/ui/button";
+import LotteryDialog from "@/components/LotteryModal";
+import Share from "@/components/Share";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -11,59 +9,53 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../../components/ui/card";
-import { ScrollArea } from "../../components/ui/scroll-area";
+} from "@/components/ui/card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Pool } from "@/types";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 
-interface Bet {
-  id: number;
-  name: string;
-  numbers: number[];
-  identifier: string;
-}
-
-export interface GroupedBets {
-  identifier: string;
-  bets: Bet[];
-}
-
-export default function Bets() {
-  const [bets, setBets] = useState<GroupedBets[]>([]);
+export default function Pools() {
+  const [pools, setPools] = useState<Pool[]>([]);
 
   useEffect(() => {
     async function fetchBets() {
-      const res = await fetch("/api/bets");
+      const res = await fetch("/api/pools");
       const data = await res.json();
 
       if (!data) {
         return;
       }
-      setBets(data as GroupedBets[]);
+      setPools(data as Pool[]);
     }
 
     void fetchBets();
   }, []);
   return (
-    <div className="flex-1 flex-col p-8">
+    <div className="flex flex-col overflow-hidden p-2 md:p-6">
       <div className="mb-4 flex items-center justify-between">
         <h1 className="text-3xl font-bold">Meus Boloes</h1>
         <LotteryDialog text="Novo Bolão" />
       </div>
-      <div className="grid gap-2 sm:grid-cols-1 md:grid-cols-2">
-        {bets.map((bet) => (
-          <Card key={bet.identifier}>
+      <div className="grid gap-2 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+        {pools.map((pool) => (
+          <Card
+            key={pool.identifier}
+            className="w-screen overflow-hidden md:w-full"
+          >
             <CardHeader>
-              <CardTitle>Bolão #{bet.identifier}</CardTitle>
+              <CardTitle>{pool.name}</CardTitle>
               <CardDescription>Mega Sena</CardDescription>
             </CardHeader>
             <CardContent>
-              <ScrollArea className="grid h-[150px] grid-cols-1 gap-2">
-                {bet.bets.map((bet) => (
+              <ScrollArea className="h-[180px] gap-2">
+                {pool.bets.map((bet) => (
                   <div key={bet.id} className="w-full space-y-2 rounded p-2">
                     <p className="font-semibold">{bet.name}</p>
                     <p className="space-x-2 text-sm text-muted-foreground">
                       {bet.numbers.map((n, index) => (
                         <span
-                          key={bet.id + n + index}
+                          key={bet.id + index}
                           className="rounded-full bg-primary p-1 text-white"
                         >
                           {n.toString().padStart(2, "0")}
@@ -77,7 +69,7 @@ export default function Bets() {
             <CardFooter className="flex justify-end gap-2">
               <Share />
               <Button>
-                <Link href={`/bets/${bet.identifier}`}>Acessar</Link>
+                <Link href={`/bets/${pool.identifier}`}>Acessar</Link>
               </Button>
             </CardFooter>
           </Card>
