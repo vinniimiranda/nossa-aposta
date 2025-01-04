@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { Loader2Icon } from "lucide-react";
 import { type ComponentProps } from "react";
 import { useFormStatus } from "react-dom";
 
@@ -17,7 +18,13 @@ export function SubmitButton({
 
   return (
     <Button type="submit" aria-disabled={pending} {...props}>
-      {pending ? pendingText : children}
+      {pending ? (
+        <>
+          <Loader2Icon className="h-6 w-6 animate-spin text-primary" />
+        </>
+      ) : (
+        children
+      )}
     </Button>
   );
 }

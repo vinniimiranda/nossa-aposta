@@ -1,10 +1,8 @@
 import { signOutAction } from "@/app/actions";
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { createClient } from "@/utils/supabase/server";
 import Link from "next/link";
 import LoginForm from "./LoginForm";
-import Signup from "./SignUp";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
@@ -67,19 +65,8 @@ export default async function Header() {
               <PopoverTrigger asChild>
                 <Button variant="secondary">Entrar</Button>
               </PopoverTrigger>
-              <PopoverContent className="sm:max-w-[425px]">
-                <Tabs defaultValue="login" className="w-full">
-                  <TabsList className="grid w-full grid-cols-2">
-                    <TabsTrigger value="login">Login</TabsTrigger>
-                    <TabsTrigger value="signup">Cadastro</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="login">
-                    <LoginForm />
-                  </TabsContent>
-                  <TabsContent value="signup">
-                    <Signup />
-                  </TabsContent>
-                </Tabs>
+              <PopoverContent className="w-[200px] sm:max-w-[425px]">
+                <LoginForm />
               </PopoverContent>
             </Popover>
           </>
