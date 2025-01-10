@@ -1,4 +1,4 @@
-"use client";
+import { getPoolsAction } from "@/app/actions";
 import LotteryDialog from "@/components/LotteryModal";
 import Share from "@/components/Share";
 import { Button } from "@/components/ui/button";
@@ -11,26 +11,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Pool } from "@/types";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 
-export default function Pools() {
-  const [pools, setPools] = useState<Pool[]>([]);
+export default async function Pools() {
+  const pools = await getPoolsAction();
 
-  useEffect(() => {
-    async function fetchBets() {
-      const res = await fetch("/api/pools");
-      const data = await res.json();
-
-      if (!data) {
-        return;
-      }
-      setPools(data as Pool[]);
-    }
-
-    void fetchBets();
-  }, []);
   return (
     <div className="flex flex-col overflow-hidden p-2 md:p-6">
       <div className="mb-4 flex items-center justify-between">

@@ -1,5 +1,3 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -10,20 +8,28 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
-import { createPool } from "../app/actions";
+import { createPool, getLotteryAction } from "../app/actions";
 import { SubmitButton } from "./SubmitButton";
 import { Input } from "./ui/input";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import Image from "next/image";
 
 interface LotteryDialogProps {
   text: string;
 }
 
-export default function LotteryDialog({ text }: LotteryDialogProps) {
-  const [open, setOpen] = useState(false);
+export default async function LotteryDialog({ text }: LotteryDialogProps) {
+  const lotteries = await getLotteryAction();
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button variant="default">{text}</Button>
       </DialogTrigger>
@@ -36,7 +42,7 @@ export default function LotteryDialog({ text }: LotteryDialogProps) {
         </DialogHeader>
 
         <form className="flex min-w-64 flex-1 flex-col">
-          <div className="flex flex-col gap-2 [&>input]:mb-3">
+          <div className="flex flex-col gap-3">
             <Label htmlFor="name">Nome</Label>
             <Input
               name="name"
@@ -44,20 +50,34 @@ export default function LotteryDialog({ text }: LotteryDialogProps) {
               required
             />
             <Label htmlFor="lottery">Loteria</Label>
-            <Input
-              type="lottery"
-              name="lottery"
-              placeholder="Mega Sena"
-              minLength={6}
-              required
-            />
+            <Select name="lottery">
+              <SelectTrigger className="w-full">
+                <SelectValue placeholder="Escolha uma loteria" />
+              </SelectTrigger>
+              <SelectContent popover="auto">
+                {lotteries.map((lottery) => (
+                  <SelectItem key={lottery.value} value={lottery.value}>
+                    <div className="flex w-full flex-1 flex-row items-center justify-between gap-3">
+                      <Image
+                        src={lottery.icon}
+                        alt={lottery.name}
+                        width={24}
+                        height={24}
+                      />
+                      {lottery.name}
+                    </div>
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <Label htmlFor="drawDate">Data de Sorteio</Label>
             <Input
-              type="drawDate"
+              type="datetime-local"
               name="drawDate"
               placeholder="31/12/2025"
               minLength={6}
               required
+              className="w-full"
             />
             <SubmitButton formAction={createPool} pendingText="Cadastrando...">
               Cadastrar

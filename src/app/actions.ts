@@ -7,6 +7,42 @@ import { createClient } from "@/utils/supabase/server";
 import { encodedRedirect } from "@/utils/utils";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { type Pool } from "../types";
+
+export const getPoolsAction = async () => {
+  const supabase = await createClient();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const pools = await db.query.pools.findMany({
+    where: (pools, { eq }) => eq(pools.owner, session?.user.email!),
+    with: {
+      bets: true,
+    },
+  });
+
+  return pools;
+};
+
+export const getPoolByIdAction = async (id: string) => {
+  const supabase = await createClient();
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  const pool = await db.query.pools.findFirst({
+    where: (pools, { eq }) => eq(pools.identifier, id),
+    with: {
+      bets: true,
+    },
+  });
+
+  const isOwner = pool?.owner === session?.user.email;
+  return Object.assign({ ...pool }, { isOwner }) as unknown as Pool;
+};
 
 export const signUpAction = async (formData: FormData) => {
   const email = formData.get("email")?.toString();
@@ -40,6 +76,82 @@ export const signUpAction = async (formData: FormData) => {
       "Thanks for signing up! Please check your email for a verification link.",
     );
   }
+};
+
+export const getLotteryAction = async () => {
+  return [
+    {
+      name: "Mega Sena",
+      value: "MEGA_SENA",
+      icon: "/assets/mega_sena.svg",
+      rules: {
+        minHits: [4, 5, 6],
+        numbersPlayable: { min: 6, max: 15 },
+        numbersAvailable: 60,
+      },
+    },
+    {
+      name: "Quina",
+      value: "QUINA",
+      icon: "/assets/quina.svg",
+      rules: {
+        minHits: [2, 3, 4, 5],
+        numbersPlayable: { min: 5, max: 15 },
+        numbersAvailable: 80,
+      },
+    },
+    {
+      name: "Loteca",
+      value: "LOTECA",
+      icon: "/assets/loteca.svg",
+      rules: {
+        minHits: [13, 14],
+        numbersPlayable: { min: 14, max: 14 },
+        numbersAvailable: 42, // Considerando 3 opções por jogo em 14 jogos
+      },
+    },
+    {
+      name: "Lotofácil",
+      value: "LOTOFACIL",
+      icon: "/assets/lotofacil.svg",
+      rules: {
+        minHits: [11, 12, 13, 14, 15],
+        numbersPlayable: { min: 15, max: 20 },
+        numbersAvailable: 25,
+      },
+    },
+    {
+      name: "Lotomania",
+      value: "LOTOMANIA",
+      icon: "/assets/lotomania.svg",
+      rules: {
+        minHits: [0, 15, 16, 17, 18, 19, 20],
+        numbersPlayable: { min: 50, max: 50 },
+        numbersAvailable: 100,
+      },
+    },
+    {
+      name: "Mais Milionaria",
+      value: "MAIS",
+      icon: "/assets/mais.svg",
+      rules: {
+        minHits: [4],
+        numbersPlayable: { min: 6, max: 6 },
+        numbersAvailable: 50, // para os números principais
+        additionalNumbers: { min: 2, max: 2, total: 6 }, // para os trevos
+      },
+    },
+    {
+      name: "Dupla Sena",
+      value: "DUPLA_SENA",
+      icon: "/assets/dupla_sena.svg",
+      rules: {
+        minHits: [3, 4, 5, 6],
+        numbersPlayable: { min: 6, max: 15 },
+        numbersAvailable: 50,
+      },
+    },
+  ];
 };
 
 export const signInWithGoogleAction = async () => {

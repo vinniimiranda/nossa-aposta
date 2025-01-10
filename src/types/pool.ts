@@ -8,4 +8,5 @@ export interface Pool {
   owner: string;
   drawDate: string;
   bets: Bet[];
+  isOwner: boolean;
 }

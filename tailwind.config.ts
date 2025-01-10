@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-require-imports */
 import { type Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
@@ -99,6 +100,9 @@ export default {
         "accordion-up": "accordion-up 0.2s ease-out",
         marquee: "marquee 50s linear infinite",
         "marquee-reverse": "marquee 50s linear infinite reverse",
+      },
+      gridTemplateColumns: {
+        "1fr": "repeat(auto-fit, minmax(460px, 1fr))",
       },
     },
   },
