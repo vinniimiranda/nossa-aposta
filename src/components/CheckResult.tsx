@@ -38,7 +38,6 @@ export default function CheckResult(props: LotteryDialogProps) {
       matches: Number(key),
       bets,
     }));
-    console.log(resultArray);
 
     setResult(resultArray);
   };

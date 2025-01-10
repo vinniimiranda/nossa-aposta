@@ -28,7 +28,7 @@ export default async function Header() {
   } = await supabase.auth.getUser();
 
   return (
-    <header className="bg-header bg-primary bg-cover bg-repeat-space p-4 text-primary-foreground bg-blend-soft-light">
+    <header className="bg-primary bg-header bg-cover bg-repeat-space p-4 text-primary-foreground bg-blend-soft-light">
       <div className="flex items-center justify-between">
         <Link href="/" className="text-2xl font-bold">
           Vamo Ganhar!
@@ -74,7 +74,12 @@ export default async function Header() {
           <DropdownMenu dir="ltr" defaultOpen={false}>
             <DropdownMenuTrigger asChild>
               <Avatar className="hover:cursor-pointer">
-                <AvatarImage src="https://github.com/shadcn.png" />
+                <AvatarImage
+                  src={
+                    user.user_metadata.picture ??
+                    "https://github.com/shadcn.png"
+                  }
+                />
                 <AvatarFallback>CN</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>

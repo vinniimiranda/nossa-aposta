@@ -41,6 +41,9 @@ export const getPoolByIdAction = async (id: string) => {
   });
 
   const isOwner = pool?.owner === session?.user.email;
+  pool?.bets.forEach((bet) =>
+    bet.numbers.sort((a, b) => Number(a) - Number(b)),
+  );
   return Object.assign({ ...pool }, { isOwner }) as unknown as Pool;
 };
 
